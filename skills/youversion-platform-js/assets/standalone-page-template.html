@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{reference}} — {{version_title}}</title>
+    <script src="https://cdn.youversion.com/platform/1/bible.css"></script>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; }
+      main { max-width: 42rem; margin: 0 auto; }
+      .meta { color: #666; margin-bottom: 1rem; }
+      .copyright { color: #666; font-size: 0.9rem; margin-top: 1.5rem; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>{{reference}}</h1>
+      <p class="meta">{{version_abbreviation}} {{version_title}}</p>
+      <div class="bible-text">{{passage_html}}</div>
+      {{copyright_html}}
+    </main>
+  </body>
+</html>
