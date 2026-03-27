@@ -17,7 +17,7 @@ description: YouVersion JavaScript/TypeScript sdk for working with Bible text an
 8. Include the required page include exactly as shown below when rendering passage HTML in the generated page:
 
 ```html
-<script src="https://cdn.youversion.com/platform/1/bible.css"></script>
+<link rel="stylesheet" href="https://cdn.youversion.com/platform/1/bible.css" />
 ```
 
 ## Response style
@@ -143,5 +143,5 @@ Default structure:
 - [ ] Included `getVersions("en")` when version discovery matters.
 - [ ] Included `getPassage(versionId, usfm)` when scripture retrieval matters.
 - [ ] Produced a full HTML document when the user asked for browser-openable output.
-- [ ] Included `<script src="https://cdn.youversion.com/platform/1/bible.css"></script>` exactly.
+- [ ] Included `<link rel="stylesheet" href="https://cdn.youversion.com/platform/1/bible.css" />` exactly.
 - [ ] Mentioned attribution when appropriate.
