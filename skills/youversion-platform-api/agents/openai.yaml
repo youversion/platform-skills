@@ -1,0 +1,4 @@
+interface:
+  display_name: "YouVersion Platform (YVP) Bible API"
+  short_description: "Call YouVersion Platform Bible APIs to show bible text."
+  default_prompt: "Use $youversion-platform-api to call the YouVersion Platform Bible APIs and show bible text from many languages."

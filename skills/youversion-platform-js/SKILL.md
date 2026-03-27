@@ -91,6 +91,7 @@ console.log(bibleVersion)
   copyright: 'Public Domain',
   language_tag: 'en',
   localized_abbreviation: 'BSB',
+  publisher_url: null,
   localized_title: 'Berean Standard Bible',
   title: 'Berean Standard Bible',
   books: [
