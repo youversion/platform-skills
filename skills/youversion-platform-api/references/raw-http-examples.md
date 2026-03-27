@@ -54,11 +54,14 @@ curl -sS \
 
 ## JavaScript with `fetch`
 
-This example uses the standard `fetch` API. It works in Node.js 18+ and can be adapted to browser JavaScript by changing how the app key is provided.
+This example uses the standard `fetch` API.
+
+- In Node.js 18+, use `const appKey = process.env.YVP_APP_KEY;`
+- In browser JavaScript, a simple pattern is `<body data-yvp-app-key="YOUR_APP_KEY">` and `const appKey = document.body.dataset.yvpAppKey;`
 
 ```js
 const API_BASE = "https://api.youversion.com";
-const appKey = process.env.YVP_APP_KEY;
+const appKey = process.env.YVP_APP_KEY; // In browser JS, use document.body.dataset.yvpAppKey.
 
 async function yvGet(path) {
   const response = await fetch(`${API_BASE}${path}`, {
@@ -85,7 +88,7 @@ const passage = await yvGet("/v1/bibles/3034/passages/JHN.3.16?format=text");
 console.log(passage.reference, passage.content);
 ```
 
-If the user specifically wants browser JavaScript, replace `process.env.YVP_APP_KEY` with the app key source used in that page or app.
+If the user specifically wants browser JavaScript, use the same request shape and swap in the page's app-key source.
 
 ## Python with `requests`
 

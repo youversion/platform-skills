@@ -1,2 +1,3 @@
 interface:
   display_name: "JavaScript YouVersion Platform (YVP) Bible API"
+  short_description: "Use JavaScript to call the YouVersion Platform Bible API to get Bible text in many languages."
