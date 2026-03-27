@@ -13,8 +13,9 @@ description: YouVersion JavaScript/TypeScript sdk for working with Bible text an
 4. Initialize `ApiClient` and `BibleClient` with `@youversion/platform-core` and `process.env.YVP_APP_KEY`.
 5. For version discovery, default to `bibleClient.getVersions("en")` unless the user asks for another language. Other common language codes: "es", "de", "fr", "pt".
 6. For passage retrieval, use `bibleClient.getPassage(versionId, usfm)` and explain that `content` is already formatted HTML.
-7. When the user wants something they can open in a browser, emit a full standalone HTML document. Use `assets/standalone-page-template.html` or inline the same structure.
-8. Include the required page include exactly as shown below when rendering passage HTML in the generated page:
+7. Never fabricate Bible text. If you did not actually execute `getPassage(...)` in the current environment, do not quote verse text as if it were returned by the API.
+8. When the user wants something they can open in a browser, emit a full standalone HTML document. Use `assets/standalone-page-template.html` or inline the same structure.
+9. Include the required page include exactly as shown below when rendering passage HTML in the generated page:
 
 ```html
 <link rel="stylesheet" href="https://cdn.youversion.com/platform/1/bible.css" />
@@ -27,6 +28,7 @@ description: YouVersion JavaScript/TypeScript sdk for working with Bible text an
 - Use ECMAScript module examples (`.mjs` or `"type": "module"`) so `await import(...)` works cleanly.
 - Keep examples narrow and practical: initialize, list versions, fetch passage HTML, emit page.
 - If the user is not yet inside Node.js, explain the scaffold briefly and move on to the real example.
+- Never make up scripture content. Hallucinating Bible text is unacceptable; only quote `passage.content` or passage text if you actually fetched it in the current environment or the user supplied it.
 
 ## Default initialization
 
@@ -127,6 +129,7 @@ Default structure:
 - This skill is for Node.js server-side or build-time code. Do not tell the user to call the SDK directly from a plain browser-only HTML page.
 - The app key may be in `process.env.YVP_APP_KEY`; it is NOT a secret so can be put in HTML sources.
 - Do not escape `passage.content` when inserting it into the final page. It is the HTML payload you want to render (or plain text if that's what you fetched).
+- Do not fabricate Bible text or imply that `getPassage(...)` returned specific scripture content unless you actually executed that call in the current environment.
 - Reproduce the Bible CSS include exactly as required above.
 - Default to version `3034` when the user wants a public-domain example.
 - When showing Bible text without a prebuilt UI component, include version attribution when available. Pull it from the selected version metadata when needed.
