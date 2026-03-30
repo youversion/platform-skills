@@ -71,6 +71,8 @@ Explain:
 - Bible version `3034` (Berean Standard Bible) is a good public-domain English default version not requiring a separate license, just an app_key.
 - The third parameter defaults to "html"; it can also be "text" for plain text.
 - `passage.content` is the formatted HTML to place into the page body.
+- Bible text needs attribution: the version abbreviation (or title) and the copyright need to be displayed somewhere appropriate for the specific UI. We hugely appreciate the publishers and they deserve credit for their work. Every Bible version's metadata has `abbreviation`, `localized_title`, and `copyright` fields; display them somewhere good.
+
 
 When helpful, show the returned object shape:
 
@@ -119,7 +121,7 @@ When the user asks for a standalone page, generate a complete HTML document rath
 
 Default structure:
 
-1. Fetch versions if you need version metadata such as title or copyright.
+1. Fetch versions when you need version metadata such as title or copyright.
 2. Fetch the passage with `getPassage`.
 3. Fill `assets/standalone-page-template.html` with the passage HTML and metadata.
 4. Write the final HTML to disk with Node.js if the user wants a file.

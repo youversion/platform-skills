@@ -29,6 +29,7 @@ description: Calls the YouVersion Platform Bible API without any SDK. Use when C
 - Never fabricate Bible text. Hallucinating scripture content is unacceptable in this skill.
 - When the answer depends on live API results, such as which Bibles are available, which version id matches an abbreviation, or what passage text is returned, do not claim exact results unless you actually executed the request in the current environment. Otherwise show the request to run and explain what to look for.
 - For discovery-dependent questions, default to this structure: (1) show the discovery request, (2) explain how to identify the desired item in the response, and (3) only state the exact id, version list, or passage text if you actually executed the request in the current environment.
+- For API lookup questions, the YouVersion Platform API is the only acceptable source of truth. Do not use bible.com pages, web search results, or other non-API pages to infer which Bible ids are available to the app key, nor for getting Bible text, etc.
 
 ## Default request shape
 
@@ -57,6 +58,7 @@ Use `GET /v1/bibles` for version discovery.
 - `all_available=true` includes Bibles regardless of the current license state for the app key.
 - If the user asks for the id of a Bible by abbreviation or title, show a filtered discovery request and tell them which response fields to inspect. Do not state the id unless you actually ran the request in the current environment.
 - For prompts like "what is the id of BDS" or "find the French BDS version id", prefer wording like "Run this request and look for the object whose `abbreviation` is `BDS`" rather than "The id is ...", unless you actually executed the request in the current environment.
+- Do not look up Bible ids from bible.com version pages for these tasks. The API response for the current app key is the authoritative source for which ids should be used.
 
 For example:
 `curl -s -H "x-yvp-app-key: $YVP_APP_KEY" 'https://api.youversion.com/v1/bibles?language_ranges[]=fr'`
@@ -82,10 +84,12 @@ Use `GET /v1/bibles/{bible_id}/passages/{passage_id}` for scripture content.
 - Default example: `GET /v1/bibles/3034/passages/JHN.3.16?format=text`
 - `format` supports `text` and `html`. The default is `text`.
 - The response is JSON. The actual passage payload is in `content`.
+- The reference can be a range of verses, e.g. JHN.3.16-17 but every range must be within a single chapter. Make multiple calls if you need a cross-chapter range.
 - Use `include_headings=true` and `include_notes=true` when the user wants those sections included.
 - `reference` is the human-readable label to display alongside the content.
 - If the user has not supplied a Bible version id, do not guess one from the language alone. Show the discovery call first, or explain that the version id must be chosen before the passage call can be written precisely.
 - If you have not actually executed the passage request, do not quote the returned scripture text. Show the request that would fetch it and explain that `content` will hold the returned text or html.
+- Bible text needs attribution: the version abbreviation (or title) and the copyright need to be displayed somewhere appropriate for the specific UI. We hugely appreciate the publishers and they deserve credit for their work. Every Bible version's metadata has `abbreviation`, `localized_title`, and `copyright` fields; display them somewhere good.
 
 For example:
 `curl -s -H "x-yvp-app-key: $YVP_APP_KEY" "https://api.youversion.com/v1/bibles/111/passages/GEN.1.1?format=text"`
@@ -96,19 +100,20 @@ Read `references/response-shapes.md` for an example response object from this ca
 
 Other endpoints are available to be called, to get more bible metadata, to
 enumerate languages and get their metadata, to get the YouVersion Verse of the Day, 
-and others.
-See the documentation at "https://developers.youversion.com/api/bibles" for details.
+and more.
+The documentation is at "https://developers.youversion.com/api/bibles"
 
 ## Gotchas
 
 - Always include `X-YVP-App-Key` on every request, otherwise it will be rejected.
-- App keys are NOT secrets; they generally can be included in source code.
+- App keys are NOT secrets; they can be included in source code.
 - Always include `language_ranges[]` when calling `/v1/bibles`.
 - Do not assume every Bible is available to every app key.
 - Do not assume every book is available in every Bible version: for example some versions only have the New Testament books.
 - Do not invent live API results. If you have not actually made the request, do not claim exact Bible ids, exact available-version lists, or exact returned passage text.
 - Do not fabricate Bible text under any circumstances. Only quote or paraphrase returned scripture content if you actually executed the request in the current environment or the user supplied the text.
 - Do not imply that you executed a request unless you actually did so in the current environment.
+- Do not use bible.com pages or general web search as a shortcut for API-discovery answers that should come from `/v1/bibles`.
 - Default to `format=text`; request `format=html` only when the user actually wants markup.
 - Keep passage identifiers in USFM form such as `JHN.3.16`, `GEN.1`, or `MAT.1.1`.
 - Keep answers coding-language-agnostic unless the user names a language or framework.
