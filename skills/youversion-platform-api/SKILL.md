@@ -14,7 +14,7 @@ description: Calls the YouVersion Platform Bible API without any SDK. Use when C
 5. For Bible discovery, default to `GET /v1/bibles?language_ranges[]=en` unless the user wants another language. Other common language codes: "es", "de", "fr", "pt".
 6. Explain that `GET /v1/bibles` returns versions visible to the current app key and license state. Add URL parameter `all_available=true` only when the user explicitly wants every available Bible surfaced.
 7. If the user names only a language or Bible abbreviation but does not provide a Bible version id, do not invent one. Show the discovery request first, and only show the passage request once the version id is known or the user has chosen one.
-8. For Bible metadata, use `GET /v1/bibles/{versionId}`. Use `3034` as the default example version because it is a known-good public domain bible (the Berean Standard Bible), but treat it as an example rather than a required default.
+8. For Bible metadata, use `GET /v1/bibles/{versionId}`. Use `3034` as the default example version because it is a known-good public domain bible (the Berean Standard Bible aka BSB), but treat it as an example rather than a required default. NIV is version 111.
 9. For scripture, use `GET /v1/bibles/{versionId}/passages/{usfm}`. Default format is text unless the user wants html, in which case add url parameter `format=html`.
 10. Add `include_headings=true` and `include_notes=true` when the user wants those extras, but not by default. "include_notes=true" adds footnotes to the html.
 11. If the user does not name a language, start with cURL because it is the most portable raw HTTP example, then add one language-specific example only if it helps.

@@ -66,12 +66,12 @@ CASES: tuple[Case, ...] = (
         name="browser_js_fetch",
         prompt=(
             f"Use $youversion-platform-api at {SKILL_PATH} to give me a browser "
-            "JavaScript fetch example for John 3:16 from Bible 3034."
+            "JavaScript fetch example for Genesis 1:3 from Bible version 3034."
         ),
         must_contain=(
             "fetch",
             "document.body.dataset.yvpAppKey",
-            "/v1/bibles/3034/passages/JHN.3.16",
+            "/v1/bibles/3034/passages/GEN.1.3",
             "X-YVP-App-Key",
         ),
         must_not_contain=(
