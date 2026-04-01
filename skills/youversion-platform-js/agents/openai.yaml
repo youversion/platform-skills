@@ -1,2 +1,3 @@
 interface:
   display_name: "JavaScript YouVersion Platform (YVP) Bible API"
+  short_description: "Node.js and TypeScript examples with @youversion/platform-core for versions, passages, and standalone HTML pages."

@@ -1,0 +1,3 @@
+interface:
+  display_name: "APIs for YouVersion Platform (YVP) Bible"
+  short_description: "Raw REST examples for YVP Bible data and text, including response shapes."
