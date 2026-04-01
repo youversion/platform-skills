@@ -84,7 +84,7 @@ Use `GET /v1/bibles` for version discovery.
 - `language_ranges[]` is required and uses repeated bracket notation such as `language_ranges[]=en&language_ranges[]=es`.
 - When multiple language ranges are provided, the API returns results from the first language range that has available Bibles.
 - This collection is paginated. Use `next_page_token` from the response as `page_token` on the next request when needed.
-- If no more than 3 fields are requested, you can add `page_size=*` to avoid pagination. For example, `https://api.youversion.com/v1/bibles?language_ranges%5B%5D=*&fields%5B%5D=id&fields%5B%5D=language_tag&page_size=*` quickly returns ids and language tags for all visible versions.
+- Only when 1 to 3 fields are requested, you can add `page_size=*` to avoid pagination. For example, `https://api.youversion.com/v1/bibles?language_ranges%5B%5D=*&fields%5B%5D=id&fields%5B%5D=localized_title&page_size=*` quickly returns ids and titles of the available versions in every language.
 - `all_available=true` includes Bibles regardless of the current license state for the app key.
 - If the user asks for the id of a Bible by abbreviation or title, show a filtered discovery request and tell them which response fields to inspect. Do not state the id unless you actually ran the request in the current environment.
 - For prompts like "what is the id of BDS" or "find the French BDS version id", prefer wording like "Run this request and look for the object whose `abbreviation` is `BDS`" rather than "The id is ...", unless you actually executed the request in the current environment.
