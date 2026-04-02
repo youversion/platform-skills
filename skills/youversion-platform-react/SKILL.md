@@ -9,7 +9,7 @@ description: "YouVersion Bible: for React, to get Bible text, html, and informat
 
 1. Determine whether the user wants **UI components**, **hooks**, or **direct core API** usage in React.
 2. If the user is not yet in a React app, briefly provide the minimal scaffold from `references/react-scaffold.md`, then continue with a concrete SDK example.
-3. Confirm the app key source. Default to `process.env`-based usage (for example `import.meta.env.VITE_YVP_APP_KEY` in Vite), and mention registration at https://platform.youversion.com.
+3. Confirm the app key source. Default to `process.env`-based usage (for example `import.meta.env.VITE_YVP_APP_KEY` in Vite); if a key is not present then ask the user for one - it can be obtained at https://platform.youversion.com
 4. Wrap the React tree with `YouVersionProvider` using `appKey`.
 5. For simple scripture rendering, prefer `BibleCard` (`@youversion/platform-react-ui`) unless the user asks for a custom UI. That shows the verse location, copyright, etc.
 6. Use `BibleTextView` to display the scripture text "bare bones" with no extra UI elements.
@@ -21,6 +21,16 @@ description: "YouVersion Bible: for React, to get Bible text, html, and informat
 ```html
 <link rel="stylesheet" href="https://cdn.youversion.com/platform/1/bible.css" />
 ```
+
+## Component documentation to consult
+
+- Read `component_documentation/youversion-provider.md` when the user needs provider setup, auth configuration, or the exact conditional prop shape for `YouVersionProvider`.
+- Read `component_documentation/bible-card.md` when the user wants the pre-styled passage card called `BibleCard`, a quick example, or its props. This is a excellent, simple, and attractive way to display standalone bible text.
+- Read `component_documentation/bible-text-view.md` when the user wants bare scripture rendering, typography-related props, or the attribution/copyright note for `BibleTextView`.
+- Read `component_documentation/bible-reader.md` when the user wants a full Bible reading component, adjustments for it using `BibleReader.Root` and `BibleReader.Toolbar` props, or controlled vs uncontrolled examples.
+- Read `component_documentation/verse-of-the-day.md` when the user wants the Verse of the Day widget, its basic example, or its props.
+
+These files contain component-specific documentation distilled into three parts: what the widget is, a basic code example, and the props/types to reference while answering.
 
 ## Response style
 
@@ -130,10 +140,12 @@ Explain that this is best used in backend/server contexts (or carefully controll
 ## References to load on demand
 
 - Read `references/react-scaffold.md` when user needs a React project setup baseline.
+- Read files in `component_documentation/` when the user asks for component-specific usage, examples, or prop details for `YouVersionProvider`, `BibleCard`, `BibleTextView`, `BibleReader`, or `VerseOfTheDay`.
 
 ## Self-check before answering
 
 - [ ] Chose the right package path (UI vs hooks vs core).
+- [ ] Know the app key to use, or have asked for one before proceeding.
 - [ ] Wrapped usage in `YouVersionProvider` with an app key.
 - [ ] Included a concrete scripture example (`reference` or `usfm`).
 - [ ] Included loading/error handling for hook examples.
