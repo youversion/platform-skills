@@ -109,7 +109,7 @@ import { ApiClient, BibleClient } from '@youversion/platform-core';
 const apiClient = new ApiClient({ appKey: process.env.YVP_APP_KEY! });
 const bibleClient = new BibleClient(apiClient);
 
-const versions = await bibleClient.getVersions('en*');
+const versions = await bibleClient.getVersions('en');
 const passage = await bibleClient.getPassage(versions.data[0].id, 'JHN.3.16');
 ```
 
@@ -118,6 +118,7 @@ Explain that this is best used in backend/server contexts (or carefully controll
 ## Gotchas
 
 - Always ensure `YouVersionProvider` wraps components/hooks that rely on SDK context.
+- `YouVersionProvider` is implemented in @youversion/platform-react-hooks and re-exported by @youversion/platform-react-ui. Import from whichever is convenient.
 - If manually rendering `passage.content`, do not escape it; it is HTML payload meant for rendering.
 - Include attribution/version metadata when rendering scripture text in custom layouts.
 - `appKey` is not a secret; it can be used client-side.

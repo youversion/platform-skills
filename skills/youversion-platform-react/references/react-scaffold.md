@@ -11,7 +11,7 @@ pnpm install
 pnpm add @youversion/platform-react-ui
 ```
 
-Create `.env`:
+Create `.env` (the app key isn't a secret so this can be checked in):
 
 ```bash
 VITE_YVP_APP_KEY=YOUR_APP_KEY_HERE

@@ -1,2 +1,3 @@
 interface:
   display_name: "React YouVersion Platform (YVP) SDK"
+  short_description: "YouVersion Bible: for React, to get Bible text, html, and information. Sample code for visual components: BibleTextView, BibleCard, and BibleReader."
