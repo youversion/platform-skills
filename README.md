@@ -15,6 +15,6 @@ The easy way: run `npx skills add youversion/platform-skills` and choose your pr
 
 Alternatively, follow the instructions for your preferred agentic coder, as installation methods vary widely. For example:
 - [Claude Code](https://code.claude.com/docs/en/skills): copy this repo's skill folders into `.claude/skills/` in your repo.
-- [Codex](https://developers.openai.com/codex/skills#install-curated-skills-for-local-use): in the CLI, run `$skill-installer install youversion/platform-skills`
+- [Codex](https://developers.openai.com/codex/skills#install-curated-skills-for-local-use): tell Codex `$skill-installer install https://github.com/youversion/platform-skills`
 - [Cursor](https://cursor.com/docs/skills#installing-skills-from-github): Open Cursor Settings → Rules, click "New", import from Github, enter this repo's URL.
-- [Gemini CLI](https://geminicli.com/docs/cli/skills/): in the CLI, run `gemini skills install https://github.com/youversion/platform-skills`
+- [Gemini CLI](https://geminicli.com/docs/cli/skills/): run `gemini skills install https://github.com/youversion/platform-skills`
