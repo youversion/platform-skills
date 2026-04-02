@@ -1,6 +1,6 @@
 ---
 name: youversion-platform-react
-description: YouVersion React SDK for rendering Bible content with ready-made UI components, hooks, or direct API access. Use when asked to build React examples with @youversion/platform-react-ui, @youversion/platform-react-hooks, or @youversion/platform-core.
+description: "YouVersion Bible: for React, to get Bible text, html, and information. Sample code for visual components: BibleTextView, BibleCard, and BibleReader"
 ---
 
 # YouVersion Platform React SDK - for React applications
@@ -11,10 +11,12 @@ description: YouVersion React SDK for rendering Bible content with ready-made UI
 2. If the user is not yet in a React app, briefly provide the minimal scaffold from `references/react-scaffold.md`, then continue with a concrete SDK example.
 3. Confirm the app key source. Default to `process.env`-based usage (for example `import.meta.env.VITE_YVP_APP_KEY` in Vite), and mention registration at https://platform.youversion.com.
 4. Wrap the React tree with `YouVersionProvider` using `appKey`.
-5. For scripture rendering, prefer `BibleTextView` (`@youversion/platform-react-ui`) unless the user asks for a custom UI.
-6. For custom rendering/state, use hooks (for example `usePassage`) from `@youversion/platform-react-hooks`.
-7. If the user needs lower-level calls (e.g., listing versions), use `@youversion/platform-core` (typically from server code, route handlers, or controlled client-side flows).
-8. When displaying passage HTML from hooks/core manually, include the Bible CSS include:
+5. For simple scripture rendering, prefer `BibleCard` (`@youversion/platform-react-ui`) unless the user asks for a custom UI. That shows the verse location, copyright, etc.
+6. Use `BibleTextView` to display the scripture text "bare bones" with no extra UI elements.
+7. Use `BibleReader` to display a fully featured Bible UX, including pickers for the user to navigate in the Bible, change Bible versions, etc.
+8. For custom rendering/state, use hooks (for example `usePassage`) from `@youversion/platform-react-hooks`.
+9. If the user needs lower-level calls (e.g., listing versions), use `@youversion/platform-core` (typically from server code, route handlers, or controlled client-side flows).
+10. When displaying passage HTML from hooks/core manually, include the Bible CSS include:
 
 ```html
 <link rel="stylesheet" href="https://cdn.youversion.com/platform/1/bible.css" />
@@ -30,7 +32,7 @@ description: YouVersion React SDK for rendering Bible content with ready-made UI
 
 ## Package selection guide
 
-- `@youversion/platform-react-ui`: fastest path with ready-made components such as `BibleTextView` and `VerseOfTheDay`.
+- `@youversion/platform-react-ui`: fastest path with ready-made components: `BibleTextView`, `BibleCard`, `BibleReader`, and `VerseOfTheDay`.
 - `@youversion/platform-react-hooks`: custom rendering/state control while still using SDK-managed data hooks.
 - `@youversion/platform-core`: direct API client (`ApiClient`, `BibleClient`) for advanced queries and version discovery.
 
@@ -53,12 +55,12 @@ pnpm add @youversion/platform-core
 ## Default UI component example
 
 ```tsx
-import { YouVersionProvider, BibleTextView } from '@youversion/platform-react-ui';
+import { YouVersionProvider, BibleCard } from '@youversion/platform-react-ui';
 
 export function App() {
   return (
     <YouVersionProvider appKey={import.meta.env.VITE_YVP_APP_KEY}>
-      <BibleTextView reference="JHN.1.1-4" versionId={3034} />
+      <BibleCard versionId={3034} reference="JHN.1.1-3" />
     </YouVersionProvider>
   );
 }
