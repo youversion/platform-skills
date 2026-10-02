@@ -88,7 +88,7 @@ export function App() {
 
 ## Default hooks example
 
-For custom HTML, add the Bible CSS and font stylesheet from the [HTML display guide](https://developers.youversion.com/guides/display-bible-html) to the page head (using the app key for the font URL). This example fetches attribution for the same version as the passage. For plain text, use `format: "text"` and render `passage.content` normally.
+This example includes both stylesheets from the [HTML display guide](https://developers.youversion.com/guides/display-bible-html); React 19 places stylesheet links with `precedence` in the document head. It fetches attribution for the same version as the passage. For plain text, use `format: "text"` and render `passage.content` normally.
 
 ```tsx
 import { YouVersionProvider, usePassage, useVersion } from '@youversion/platform-react-hooks';
@@ -113,10 +113,19 @@ function BibleVerse() {
 }
 
 export function App() {
+  const appKey = import.meta.env.VITE_YVP_APP_KEY;
   return (
-    <YouVersionProvider appKey={import.meta.env.VITE_YVP_APP_KEY}>
-      <BibleVerse />
-    </YouVersionProvider>
+    <>
+      <link rel="stylesheet" href="https://cdn.youversion.com/platform/1/bible.css" precedence="youversion" />
+      <link
+        rel="stylesheet"
+        href={`https://api.youversion.com/v1/fonts/1/stylesheet?app_key=${encodeURIComponent(appKey)}`}
+        precedence="youversion"
+      />
+      <YouVersionProvider appKey={appKey}>
+        <BibleVerse />
+      </YouVersionProvider>
+    </>
   );
 }
 ```

@@ -63,8 +63,12 @@ import { readFile, writeFile } from "node:fs/promises";
 import { ApiClient, BibleClient } from "@youversion/platform-core";
 
 const bibleClient = new BibleClient(new ApiClient({ appKey: process.env.YVP_APP_KEY }));
+const versionId = 3034;
 const passageId = "JHN.3.16";
-const display = await bibleClient.getPassageDisplay({ versionId: 3034, passageId });
+const [display, passage] = await Promise.all([
+  bibleClient.getPassageDisplay({ versionId, passageId }),
+  bibleClient.getPassage(versionId, passageId, "text"),
+]);
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (character) => ({
@@ -73,7 +77,7 @@ function escapeHtml(value) {
 }
 
 const values = {
-  reference: escapeHtml(passageId),
+  reference: escapeHtml(passage.reference),
   version_title: escapeHtml(display.version.localized_title || display.version.title),
   version_abbreviation: escapeHtml(display.version.localized_abbreviation || display.version.abbreviation),
   stylesheet_links: display.stylesheets.map(({ rel, href }) =>
@@ -95,4 +99,4 @@ await writeFile("passage.html", html, "utf8");
 console.log("Wrote passage.html");
 ```
 
-Only `display.html` is inserted as scripture HTML; attribution and other text are escaped. The display API supplies current attribution and both Bible CSS and font resources. Do not download or self-host the font files. See [Display Bible HTML](https://developers.youversion.com/guides/display-bible-html).
+The passage response supplies the human-readable `reference` for the page title and heading; the display result does not include that field. Only `display.html` is inserted as scripture HTML; attribution and other text are escaped. The display API supplies current attribution and both Bible CSS and font resources. Do not download or self-host the font files. See [Display Bible HTML](https://developers.youversion.com/guides/display-bible-html).
