@@ -10,6 +10,8 @@ cd yv-js-demo
 npm init -y
 npm pkg set type=module
 npm install @youversion/platform-core
+# Add this when rendering transformed Bible HTML on the server:
+npm install jsdom
 export YVP_APP_KEY='YOUR_APP_KEY_HERE'
 ```
 

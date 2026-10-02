@@ -6,7 +6,7 @@ Display any Bible passage with proper formatting.
 
 > Note: When using the `BibleTextView` component, you are responsible for displaying any required Bible version copyright notice, as required by the license.
 >
-> This component gives you full flexibility over layout, so be sure to add copyright or attribution credits yourself where appropriate in your UI. If you want these credits handled for you automatically, use the `BibleCard` component instead.
+> This component gives you full flexibility over layout, so display the selected version's `copyright`, falling back to `promotional_content`, as text. Report missing attribution instead of silently omitting it. If you want these credits handled for you automatically, use the `BibleCard` component instead.
 
 ## Basic Code Example
 

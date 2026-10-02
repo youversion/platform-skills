@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{reference}} — {{version_title}}</title>
-    <link rel="stylesheet" href="https://cdn.youversion.com/platform/1/bible.css" />
+    {{stylesheet_links}}
     <style>
       body { font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; }
       main { max-width: 42rem; margin: 0 auto; }
@@ -16,8 +16,8 @@
     <main>
       <h1>{{reference}}</h1>
       <p class="meta">{{version_abbreviation}} {{version_title}}</p>
-      <div class="bible-text">{{passage_html}}</div>
-      {{copyright_html}}
+      <article {{container_attributes}}>{{passage_html}}</article>
+      <p class="copyright">{{attribution_text}}</p>
     </main>
   </body>
 </html>
