@@ -16,11 +16,7 @@ description: "YouVersion Bible: for React, to get Bible text, html, and informat
 7. Use `BibleReader` to display a fully featured Bible UX, including pickers for the user to navigate in the Bible, change Bible versions, etc.
 8. For custom rendering/state, use hooks (for example `usePassage`) from `@youversion/platform-react-hooks`.
 9. If the user needs lower-level calls (e.g., listing versions), use `@youversion/platform-core` (typically from server code, route handlers, or controlled client-side flows).
-10. When displaying passage HTML from hooks/core manually, include the Bible CSS include:
-
-```html
-<link rel="stylesheet" href="https://cdn.youversion.com/platform/1/bible.css" />
-```
+10. For custom styled HTML from core, prefer `getPassageDisplay` and apply its stylesheets, container attributes, and current attribution. For `usePassage` HTML, add the Bible CSS and font resources and scoped container from the [HTML display guide](https://developers.youversion.com/guides/display-bible-html), and fetch attribution with `useVersion`. Render attribution as text.
 
 ## Component documentation to consult
 
@@ -92,23 +88,44 @@ export function App() {
 
 ## Default hooks example
 
+This example includes both stylesheets from the [HTML display guide](https://developers.youversion.com/guides/display-bible-html); React 19 places stylesheet links with `precedence` in the document head. It fetches attribution for the same version as the passage. For plain text, use `format: "text"` and render `passage.content` normally.
+
 ```tsx
-import { YouVersionProvider, usePassage } from '@youversion/platform-react-hooks';
+import { YouVersionProvider, usePassage, useVersion } from '@youversion/platform-react-hooks';
 
 function BibleVerse() {
-  const { passage, loading, error } = usePassage({ versionId: 3034, usfm: 'JHN.3.16' });
+  const versionId = 3034;
+  const { passage, loading, error } = usePassage({ versionId, usfm: 'JHN.3.16', format: 'html' });
+  const { version, loading: versionLoading, error: versionError } = useVersion(versionId);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Could not load passage.</div>;
+  if (loading || versionLoading) return <div>Loading...</div>;
+  if (error || versionError) return <div>Could not load passage.</div>;
+  const attribution = version?.copyright?.trim() || version?.promotional_content?.trim();
+  if (!passage || !version || !attribution) return <div>Unable to display scripture with attribution.</div>;
 
-  return <div dangerouslySetInnerHTML={{ __html: passage?.content || '' }} />;
+  return (
+    <article>
+      <h2>{passage.reference} ({version.localized_abbreviation || version.abbreviation})</h2>
+      <div data-yv-sdk="" data-slot="yv-bible-renderer" dangerouslySetInnerHTML={{ __html: passage.content }} />
+      <p>{attribution}</p>
+    </article>
+  );
 }
 
 export function App() {
+  const appKey = import.meta.env.VITE_YVP_APP_KEY;
   return (
-    <YouVersionProvider appKey={import.meta.env.VITE_YVP_APP_KEY}>
-      <BibleVerse />
-    </YouVersionProvider>
+    <>
+      <link rel="stylesheet" href="https://cdn.youversion.com/platform/1/bible.css" precedence="youversion" />
+      <link
+        rel="stylesheet"
+        href={`https://api.youversion.com/v1/fonts/1/stylesheet?app_key=${encodeURIComponent(appKey)}`}
+        precedence="youversion"
+      />
+      <YouVersionProvider appKey={appKey}>
+        <BibleVerse />
+      </YouVersionProvider>
+    </>
   );
 }
 ```
@@ -121,21 +138,26 @@ import { ApiClient, BibleClient } from '@youversion/platform-core';
 const apiClient = new ApiClient({ appKey: process.env.YVP_APP_KEY! });
 const bibleClient = new BibleClient(apiClient);
 
-const versions = await bibleClient.getVersions('en');
-const passage = await bibleClient.getPassage(versions.data[0].id, 'JHN.3.16');
+const display = await bibleClient.getPassageDisplay({ versionId: 3034, passageId: 'JHN.3.16' });
 ```
 
-Explain that this is best used in backend/server contexts (or carefully controlled client usage), then passed into React UI.
+Use the client in the project's browser or server runtime; server-side HTML transformation needs `jsdom`. For styled display, render `display.html` with its `containerAttributes`, add `display.stylesheets` to the document head, and render `display.attribution.text` normally. Prefer ready-made components when custom HTML is unnecessary.
 
 ## Gotchas
 
 - Always ensure `YouVersionProvider` wraps components/hooks that rely on SDK context.
 - `YouVersionProvider` is implemented in @youversion/platform-react-hooks and re-exported by @youversion/platform-react-ui. Import from whichever is convenient.
-- If manually rendering `passage.content`, do not escape it; it is HTML payload meant for rendering.
-- Include attribution/version metadata when rendering scripture text in custom layouts.
+- Render HTML as HTML only when requested as HTML; plain-text content and attribution must be rendered as text.
+- Custom layouts, including `BibleTextView`, must display the selected version's required attribution. Use `copyright` with `promotional_content` as a fallback; report missing attribution instead of omitting it.
 - `appKey` is not a secret; it can be used client-side.
 - Some Bible versions require explicit license acceptance on platform.youversion.com.
 - For public-domain English demos, default to `3034` (Berean Standard Bible).
+
+## Common customizations
+
+- You can restrict the Bible catalog by language or version, or exclude versions, using provider configuration. See [version filters](https://developers.youversion.com/sdks/react/components#limit-which-bible-versions-the-sdk-uses).
+- You can set UI locale/direction independently of scripture direction, and choose light, dark, or system theme. See [components](https://developers.youversion.com/sdks/react/components) and [theming](https://developers.youversion.com/sdks/react/guides/theming).
+- For a custom reader layout or verse-selection handling, use the SDK's pickers and `BibleReader.Root.onVerseSelect` as needed. For card sizing, use `BibleCard.maxWidth`. See [component documentation](https://developers.youversion.com/sdks/react/components) for current props rather than inventing them.
 
 ## References to load on demand
 
@@ -149,5 +171,5 @@ Explain that this is best used in backend/server contexts (or carefully controll
 - [ ] Wrapped usage in `YouVersionProvider` with an app key.
 - [ ] Included a concrete scripture example (`reference` or `usfm`).
 - [ ] Included loading/error handling for hook examples.
-- [ ] Added Bible CSS include when manually rendering passage HTML.
+- [ ] Applied stylesheets and container attributes for custom HTML and displayed required attribution.
 - [ ] Mentioned version/licensing considerations when relevant.
