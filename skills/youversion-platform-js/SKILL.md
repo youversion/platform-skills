@@ -1,6 +1,6 @@
 ---
 name: youversion-platform-js
-description: YouVersion JavaScript and TypeScript SDK usage with `@youversion/platform-core`. Use for browser, Node.js, or serverless SDK examples, Bible discovery, passage text, or display-ready Bible HTML. For React UI, use the React skill; for raw HTTP, use the API skill.
+description: YouVersion JavaScript and TypeScript SDK usage with `@youversion/platform-core`. Use for browser, Node.js, or serverless SDK examples, Bible discovery, passage text, display-ready Bible HTML, or Verse of the Day. For React UI, use the React skill; for raw HTTP, use the API skill.
 ---
 
 # YouVersion Platform JS
@@ -12,6 +12,7 @@ Use this skill for JavaScript or TypeScript SDK answers.
 - The user explicitly wants `@youversion/platform-core`.
 - The user wants browser, Node.js, serverless, or TypeScript SDK examples rather than raw HTTP requests.
 - The user wants to list versions, fetch a version object, or render passage HTML through the SDK.
+- The user wants the Verse of the Day outside React. Use `getVOTD(...)` rather than a hand-rolled REST call.
 - The user wants a standalone HTML page generated from a JS script.
 
 ## Reach For Another Skill When
@@ -116,6 +117,24 @@ Use `3034` (Berean Standard Bible) for a public-domain English example; `111` (N
 `getPassageDisplay` fetches current metadata on each call, uses `copyright` with `promotional_content` as a fallback, and fails if attribution is missing. It returns data only: the caller installs resources and renders the result.
 
 For lower-level HTML retrieval, `getPassage` defaults to HTML with sanitization/transformation enabled; its sixth argument can disable transformation for raw API HTML. Prefer the display API when the result will be styled and shown to users. See the [JavaScript SDK](https://developers.youversion.com/sdks/javascript/index) and [HTML display guide](https://developers.youversion.com/guides/display-bible-html).
+
+## Default Verse of the Day example
+
+```js
+const startOfYear = Date.UTC(new Date().getUTCFullYear(), 0, 1);
+const dayOfYear = Math.floor((Date.now() - startOfYear) / 86_400_000) + 1;
+
+const { passage_id } = await bibleClient.getVOTD(dayOfYear);
+const display = await bibleClient.getPassageDisplay({
+  versionId: 3034,
+  passageId: passage_id,
+});
+```
+
+- `getVOTD(day)` returns `{ day, passage_id }` — a reference, not scripture text and not a Bible version. Fetch the passage separately with the user's selected, accessible version and display attribution with it.
+- `day` is the day of the year, from 1 to 366, not the day of the month. The example above resolves "today" in UTC; compute it from calendar dates in the user's intended timezone when the rollover time matters.
+- `getAllVOTDs()` returns the calendar for an entire year as a collection of the same `{ day, passage_id }` entries. Use it when the user wants the whole year, not for a single day.
+- Raw untransformed HTML is often sufficient for a verse-of-the-day display, where verse-level interactivity is not needed; that also avoids the `jsdom` dependency on the server.
 
 ## Gotchas
 
