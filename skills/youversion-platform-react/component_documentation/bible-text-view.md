@@ -10,6 +10,12 @@ Display any Bible passage with proper formatting.
 
 ## Basic Code Example
 
+This example imports both UI components and hooks. Install both packages directly, even if the scaffold already installed the UI package:
+
+```bash
+pnpm add @youversion/platform-react-ui @youversion/platform-react-hooks
+```
+
 Render this component inside `YouVersionProvider` (see [provider setup](youversion-provider.md)). Fetch metadata for the same version before displaying scripture.
 
 ```tsx

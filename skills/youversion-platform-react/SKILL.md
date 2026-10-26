@@ -44,7 +44,7 @@ These files contain component-specific documentation distilled into three parts:
 
 ## Default installation
 
-Recommend one of these, depending on user goal:
+Install the packages the example imports directly. Choose the applicable commands below; examples combining UI components and hooks need both packages installed. Do not rely on transitive dependencies for application imports, particularly with pnpm's isolated layout.
 
 ```bash
 pnpm add @youversion/platform-react-ui
